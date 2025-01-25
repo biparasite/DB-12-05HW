@@ -77,11 +77,12 @@ SHOW INDEX FROM `payment` AND `rental`;
 - Убрал из запроса f.title
 
 ```SQL
+EXPLAIN ANALYZE
 SELECT DISTINCT  CONCAT(c.last_name, ' ', c.first_name ), sum(p.amount) OVER (PARTITION BY c.customer_id )
 FROM
     payment p, rental r, customer c
 WHERE
-    DATE(p.payment_date) = '2005-07-30'
+    payment_date >= '2005-07-30' and payment_date < DATE_ADD('2005-07-30', INTERVAL 1 DAY)
     AND
     p.payment_date = r.rental_date
     AND
