@@ -51,7 +51,7 @@ from payment p, rental r, customer c, inventory i, film f
 where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and r.customer_id = c.customer_id and i.inventory_id = r.inventory_id;
 ```
 
-![task2](https://github.com/biparasite/DB-12-04HW/blob/main/task_2.1.png "task2"
+![task2](https://github.com/biparasite/DB-12-05HW/blob/main/task_2.1.png "task2"
 
 ---
 
