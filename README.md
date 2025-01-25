@@ -9,16 +9,16 @@
 ### Ответ
 
 ```SQL
-SELECT table_schema,
+SELECT TABLE_SCHEMA,
     SUM(data_length) AS SUM_data_length,
     SUM(index_length) AS SUM_index_length,
     SUM(index_length) * 100 / SUM(data_length) AS 'index_length %'
 FROM
     INFORMATION_SCHEMA.TABLES
+WHERE
+    TABLE_SCHEMA = 'sakila'
 GROUP BY
-    table_schema
-HAVING
-    table_schema = "sakila";
+    TABLE_SCHEMA;
 ```
 
 <details> <summary>Скриншот к заданию 1</summary>
@@ -53,10 +53,51 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 
 ![task2](https://github.com/biparasite/DB-12-05HW/blob/main/task_2.1.png "task2")
 
+Перечислите узкие места:
+
+- Перебор большого числа строк (642000)
+- отсутствие индексов
+
+Оптимизируйте запрос:
+
+- Создание индектов для payment_date и rental_date
+
+```SQL
+ALTER TABLE `payment` ADD INDEX `payment_date_index` (`payment_date`);
+ALTER TABLE `rental` ADD INDEX `rental_date_index` (`rental_date`);
+SHOW INDEX FROM `payment` AND `rental`;
+```
+
+<details> <summary>Скриншот к заданию 2</summary>
+
+![task2](https://github.com/biparasite/DB-12-05HW/blob/main/task_2.2.png "task2")
+
+</details>
+
+- Убрал из запроса f.title
+
+```SQL
+SELECT DISTINCT  CONCAT(c.last_name, ' ', c.first_name ), sum(p.amount) OVER (PARTITION BY c.customer_id )
+FROM
+    payment p, rental r, customer c
+WHERE
+    DATE(p.payment_date) = '2005-07-30'
+    AND
+    p.payment_date = r.rental_date
+    AND
+    r.customer_id = c.customer_id;
+```
+
+![task2](https://github.com/biparasite/DB-12-05HW/blob/main/task_2.3.png "task2")
+
 ---
 
 ## Задание 3\*
 
 Самостоятельно изучите, какие типы индексов используются в PostgreSQL. Перечислите те индексы, которые используются в PostgreSQL, а в MySQL — нет.
+
+### Ответ
+
+GiST, SP-GiST, BRIN индексы.
 
 ---
