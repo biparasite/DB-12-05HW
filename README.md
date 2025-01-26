@@ -93,7 +93,7 @@ WHERE
 
 - Выриант 2
 
-#### С использованием мультиколоночные индексов
+#### С использованием мультиколоночных индексов
 
 ```SQL
 CREATE INDEX idx_r_customer_rental_date ON rental(customer_id, rental_date);
