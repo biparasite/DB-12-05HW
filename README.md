@@ -91,6 +91,26 @@ WHERE
 
 ![task2](https://github.com/biparasite/DB-12-05HW/blob/main/task_2.3.png "task2")
 
+- Выриант 2
+
+#### С использованием мультиколоночные индексов
+
+```SQL
+CREATE INDEX idx_r_customer_rental_date ON rental(customer_id, rental_date);
+CREATE INDEX idx_p_payment_date_amount ON payment(payment_date, amount);
+```
+
+```SQL
+EXPLAIN ANALYZE
+SELECT DISTINCT  CONCAT(c.last_name, ' ', c.first_name ), SUM(p.amount) OVER (PARTITION BY c.customer_id )
+FROM sakila.customer c
+JOIN sakila.rental r ON c.customer_id = r.customer_id
+JOIN sakila.payment p ON r.rental_date = p.payment_date
+WHERE r.rental_date BETWEEN '2005-07-30' AND '2005-07-31';
+```
+
+![task2](https://github.com/biparasite/DB-12-05HW/blob/main/task_2.4.png "task2")
+
 ---
 
 ## Задание 3\*
